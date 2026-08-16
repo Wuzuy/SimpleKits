@@ -118,13 +118,7 @@ public static class KitUiBuilder
 		CreateButton(panel, "CKit", "+ NEW", Hex("0EA5E9FF"), 20,
 			Anchors.TopRight, new Vector2(-226f, -44f), new Vector2(150f, 60f)).gameObject.SetActive(false);
 
-		RectTransform autoEquip = CreateButton(panel, "AutoEquip", "AUTO-EQUIP: ON", Hex("334155FF"), 18,
-			Anchors.TopRight, new Vector2(-360f, -44f), new Vector2(230f, 60f));
-		autoEquip.Find("Label").name = "AutoEquipLabel";
-
-		RectTransform allowOverflow = CreateButton(panel, "AllowOverflow", "PEGAR SEM ESPACO: OFF", Hex("475569FF"), 16,
-			Anchors.TopRight, new Vector2(-625f, -44f), new Vector2(250f, 60f));
-		allowOverflow.Find("Label").name = "AllowOverflowLabel";
+		CreateGearButton(panel, "Settings", new Vector2(-360f, -44f), 60f);
 
 		CreateButton(panel, "BExit", "CLOSE", Hex("EF4444FF"), 22,
 			Anchors.TopRight, new Vector2(-48f, -44f), new Vector2(150f, 60f));
@@ -148,6 +142,8 @@ public static class KitUiBuilder
 
 		BuildEditorPanel(root);
 		BuildVaultPanel(root);
+		BuildSettingsPanel(root);
+		BuildPreviewPanel(root);
 
 		for (int i = 1; i <= 8; i++)
 		{
@@ -180,8 +176,8 @@ public static class KitUiBuilder
 			RectTransform playerExt = CreateImage(slot, "Kit" + i + "_Extension [PLAYER]", Color.clear, false,
 				Anchors.StretchAll, Vector2.zero, Vector2.zero, true);
 
-			CreateButton(playerExt, "Player_Kit" + i + "_ClaimP", "CLAIM", Hex("059669FF"), 23,
-				Anchors.BottomCenter, new Vector2(0f, 10f), new Vector2(220f, 58f));
+			CreateButton(playerExt, "Player_Kit" + i + "_ClaimP", "CLAIM", Hex("059669FF"), 20,
+				Anchors.BottomCenter, new Vector2(-85f, 10f), new Vector2(150f, 58f));
 
 			RectTransform claimP = playerExt.Find("Player_Kit" + i + "_ClaimP") as RectTransform;
 			Transform claimPLabel = claimP.Find("Label");
@@ -190,8 +186,8 @@ public static class KitUiBuilder
 				claimPLabel.name = "Player_Kit" + i + "_ClaimP Label";
 			}
 
-			CreateButton(playerExt, "Player_Kit" + i + "_ClaimP [DISABLED]", "CLAIM", Hex("475569FF"), 23,
-				Anchors.BottomCenter, new Vector2(0f, 10f), new Vector2(220f, 58f));
+			CreateButton(playerExt, "Player_Kit" + i + "_ClaimP [DISABLED]", "CLAIM", Hex("475569FF"), 20,
+				Anchors.BottomCenter, new Vector2(-85f, 10f), new Vector2(150f, 58f));
 
 			RectTransform claimD = playerExt.Find("Player_Kit" + i + "_ClaimP [DISABLED]") as RectTransform;
 			Transform claimDLabel = claimD.Find("Label");
@@ -201,16 +197,21 @@ public static class KitUiBuilder
 			}
 			claimD.gameObject.SetActive(false);
 
+			CreateButton(playerExt, "Player_Kit" + i + "_Preview", "VISUALIZAR", Hex("334155FF"), 16,
+				Anchors.BottomCenter, new Vector2(85f, 10f), new Vector2(150f, 58f));
+
 			RectTransform adminExt = CreateImage(slot, "Kit" + i + "_Extension", Color.clear, false,
 				Anchors.StretchAll, Vector2.zero, Vector2.zero, true);
 			adminExt.gameObject.SetActive(false);
 
-			CreateButton(adminExt, "ADM_Kit" + i + "_Claim", "CLAIM", Hex("16A34AFF"), 15,
-				Anchors.BottomCenter, new Vector2(-95f, 10f), new Vector2(92f, 54f)).gameObject.SetActive(false);
-			CreateButton(adminExt, "ADM_Kit" + i + "_Edit", "EDIT", Hex("0EA5E9FF"), 15,
-				Anchors.BottomCenter, new Vector2(0f, 10f), new Vector2(92f, 54f)).gameObject.SetActive(false);
-			CreateButton(adminExt, "ADM_Kit" + i + "_Delete", "DELETE", Hex("EF4444FF"), 15,
-				Anchors.BottomCenter, new Vector2(95f, 10f), new Vector2(92f, 54f)).gameObject.SetActive(false);
+			CreateButton(adminExt, "ADM_Kit" + i + "_Claim", "CLAIM", Hex("16A34AFF"), 13,
+				Anchors.BottomCenter, new Vector2(-110f, 10f), new Vector2(70f, 54f)).gameObject.SetActive(false);
+			CreateButton(adminExt, "ADM_Kit" + i + "_Edit", "EDIT", Hex("0EA5E9FF"), 13,
+				Anchors.BottomCenter, new Vector2(-37f, 10f), new Vector2(70f, 54f)).gameObject.SetActive(false);
+			CreateButton(adminExt, "ADM_Kit" + i + "_Delete", "DELETE", Hex("EF4444FF"), 12,
+				Anchors.BottomCenter, new Vector2(37f, 10f), new Vector2(70f, 54f)).gameObject.SetActive(false);
+			CreateButton(adminExt, "ADM_Kit" + i + "_Preview", "VER", Hex("334155FF"), 13,
+				Anchors.BottomCenter, new Vector2(110f, 10f), new Vector2(70f, 54f)).gameObject.SetActive(false);
 		}
 	}
 
@@ -240,23 +241,26 @@ public static class KitUiBuilder
 		CreateImage(editor, "EditorAccent", Hex("38BDF8FF"), false,
 			Anchors.TopStretch, new Vector2(0f, -78f), new Vector2(0f, 3f), false);
 
-		CreateField(editor, "Nome:", -126f);
-		CreateInput(editor, "KitName", "Ex.: pvp", 24, new Vector2(0f, -126f), new Vector2(760f, 60f));
+		CreateField(editor, "Nome:", -118f);
+		CreateInput(editor, "KitName", "Ex.: pvp", 22, new Vector2(0f, -118f), new Vector2(760f, 54f));
 
-		CreateField(editor, "Itens (formato: IDxQtd separado por vírgula - Ex.: 95x2,393x3,394x1):", -230f);
-		CreateInput(editor, "KitItems", "95x2,393x3,394x1", 24, new Vector2(0f, -230f), new Vector2(760f, 60f));
+		CreateField(editor, "Itens (formato: IDxQtd separado por vírgula - Ex.: 95x2,393x3,394x1):", -212f);
+		CreateInput(editor, "KitItems", "95x2,393x3,394x1", 22, new Vector2(0f, -212f), new Vector2(760f, 54f));
 
-		CreateField(editor, "Cooldown em segundos (0 = sem cooldown):", -334f);
-		CreateInput(editor, "KitCooldown", "60", 24, new Vector2(0f, -334f), new Vector2(760f, 60f));
+		CreateField(editor, "Cooldown em segundos (0 = sem cooldown):", -306f);
+		CreateInput(editor, "KitCooldown", "60", 22, new Vector2(0f, -306f), new Vector2(760f, 54f));
 
-		CreateField(editor, "Prioridade (maior aparece primeiro):", -438f);
-		CreateInput(editor, "KitPriority", "1", 24, new Vector2(0f, -438f), new Vector2(760f, 60f));
+		CreateField(editor, "Prioridade (maior aparece primeiro):", -400f);
+		CreateInput(editor, "KitPriority", "1", 22, new Vector2(0f, -400f), new Vector2(760f, 54f));
 
-		CreateField(editor, "Permissão necessária (deixe vazio = todos podem):", -542f);
-		CreateInput(editor, "KitPerm", "", 24, new Vector2(0f, -542f), new Vector2(760f, 60f));
+		CreateField(editor, "Permissão necessária (deixe vazio = todos podem):", -494f);
+		CreateInput(editor, "KitPerm", "", 22, new Vector2(0f, -494f), new Vector2(760f, 54f));
+
+		CreateField(editor, "Ícone do kit (URL; vazio = ícone do 1º item):", -588f);
+		CreateInput(editor, "KitIcon", "https://... (opcional)", 22, new Vector2(0f, -588f), new Vector2(760f, 54f));
 
 		CreateButton(editor, "OpenVault", "ABRIR BAÚ", Hex("0EA5E9FF"), 20,
-			Anchors.TopCenter, new Vector2(0f, -628f), new Vector2(760f, 56f));
+			Anchors.TopCenter, new Vector2(0f, -664f), new Vector2(760f, 54f));
 
 		CreateButton(editor, "Save", "SALVAR", Hex("059669FF"), 22,
 			Anchors.BottomCenter, new Vector2(-190f, 96f), new Vector2(360f, 60f));
@@ -329,6 +333,175 @@ public static class KitUiBuilder
 
 		CreateButton(vaultFooter, "VaultClose", "FECHAR BAU E VOLTAR AO EDITOR", Hex("059669FF"), 19,
 			Anchors.BottomCenter, new Vector2(0f, 34f), new Vector2(820f, 54f));
+	}
+
+	private static void BuildSettingsPanel(Transform root)
+	{
+		RectTransform settings = CreateImage(root, "SettingsPanel", Hex("0E1524F0"), true,
+			new Anchors(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f)), new Vector2(0f, 20f), new Vector2(1560f, 900f), false);
+		settings.gameObject.SetActive(false);
+
+		CreateText(settings, "SettingsTitle", "CONFIGURAÇÕES", 50, Color.white, TextAnchor.MiddleCenter,
+			Anchors.TopStretch, new Vector2(0f, -42f), new Vector2(0f, 60f));
+
+		CreateImage(settings, "SettingsAccent", Hex("38BDF8FF"), false,
+			Anchors.TopStretch, new Vector2(0f, -108f), new Vector2(0f, 4f), false);
+
+		CreateButton(settings, "SettingsClose", "FECHAR", Hex("EF4444FF"), 22,
+			Anchors.TopRight, new Vector2(-48f, -44f), new Vector2(150f, 60f));
+
+		CreateText(settings, "SettingsLabelAuto", "AUTO-EQUIP", 26, Color.white, TextAnchor.MiddleLeft,
+			Anchors.TopLeft, new Vector2(180f, -240f), new Vector2(360f, 64f));
+
+		RectTransform setAuto = CreateButton(settings, "SetAutoEquip", "ON", Hex("0EA5E9FF"), 24,
+			Anchors.TopCenter, new Vector2(-200f, -240f), new Vector2(200f, 64f));
+		setAuto.Find("Label").name = "SetAutoEquipLabel";
+
+		CreateButton(settings, "InfoAutoEquip", "?", Hex("334155FF"), 28,
+			Anchors.TopCenter, new Vector2(40f, -240f), new Vector2(64f, 64f));
+
+		CreateText(settings, "SettingsLabelOverflow", "PEGAR SEM ESPAÇO", 26, Color.white, TextAnchor.MiddleLeft,
+			Anchors.TopLeft, new Vector2(180f, -340f), new Vector2(360f, 64f));
+
+		RectTransform setOverflow = CreateButton(settings, "SetOverflow", "OFF", Hex("475569FF"), 24,
+			Anchors.TopCenter, new Vector2(-200f, -340f), new Vector2(200f, 64f));
+		setOverflow.Find("Label").name = "SetOverflowLabel";
+
+		CreateButton(settings, "InfoOverflow", "?", Hex("334155FF"), 28,
+			Anchors.TopCenter, new Vector2(40f, -340f), new Vector2(64f, 64f));
+
+		RectTransform tipInfo = CreateImage(settings, "TipInfo", Hex("101A30FF"), false,
+			Anchors.BottomCenter, new Vector2(0f, 64f), new Vector2(720f, 170f), false);
+		tipInfo.gameObject.SetActive(false);
+
+		CreateImage(tipInfo, "TipInfoAccent", Hex("38BDF8FF"), false,
+			Anchors.TopStretch, new Vector2(0f, 0f), new Vector2(0f, 3f), false);
+
+		RectTransform tipText = CreateText(tipInfo, "TipInfoText", "", 17, Color.white, TextAnchor.MiddleLeft,
+			Anchors.StretchAll, new Vector2(20f, -10f), new Vector2(-40f, -20f));
+		tipText.GetComponent<Text>().horizontalOverflow = HorizontalWrapMode.Wrap;
+		tipText.GetComponent<Text>().verticalOverflow = VerticalWrapMode.Overflow;
+	}
+
+	private static void BuildPreviewPanel(Transform root)
+	{
+		RectTransform preview = CreateImage(root, "PreviewPanel", Hex("0E1524F0"), true,
+			new Anchors(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f)), new Vector2(0f, 20f), new Vector2(1360f, 820f), false);
+		preview.gameObject.SetActive(false);
+
+		CreateText(preview, "PreviewTitle", "VISUALIZAR", 30, Color.white, TextAnchor.MiddleCenter,
+			Anchors.TopStretch, new Vector2(0f, -28f), new Vector2(0f, 46f));
+
+		CreateText(preview, "PreviewHint", "Clique com o botão DIREITO em VISUALIZAR para ver os acessórios das armas (mira, pente, cano, etc.).", 16, Hex("94A3B8FF"), TextAnchor.MiddleCenter,
+			Anchors.TopStretch, new Vector2(0f, -82f), new Vector2(0f, 26f));
+
+		CreateButton(preview, "PreviewClose", "FECHAR", Hex("EF4444FF"), 20,
+			Anchors.TopRight, new Vector2(-48f, -28f), new Vector2(150f, 54f));
+
+		float slotW = 200f;
+		float slotH = 96f;
+		float gap = 10f;
+		float startX = -525f;
+		float startY = -160f;
+		for (int i = 0; i < 30; i++)
+		{
+			float col = i % 6;
+			float row = i / 6;
+			RectTransform slotBtn = CreateButton(preview, "PreviewSlot" + i, "", Hex("1E2B47FF"), 14,
+				Anchors.TopCenter, new Vector2(startX + col * (slotW + gap), startY - row * (slotH + gap)), new Vector2(slotW, slotH));
+
+			CreateImage(slotBtn, "PreviewSlot" + i + "_Icon", Color.white, false,
+				Anchors.MiddleLeft, new Vector2(10f, 0f), new Vector2(64f, 64f), false);
+
+			RectTransform labelRt = slotBtn.Find("Label") as RectTransform;
+			labelRt.name = "PreviewSlot" + i + "_Label";
+			labelRt.anchorMin = new Vector2(0f, 0f);
+			labelRt.anchorMax = new Vector2(1f, 1f);
+			labelRt.pivot = new Vector2(0.5f, 0.5f);
+			labelRt.offsetMin = new Vector2(86f, 8f);
+			labelRt.offsetMax = new Vector2(-12f, -8f);
+			Text slotLabel = labelRt.GetComponent<Text>();
+			slotLabel.fontSize = 14;
+			slotLabel.alignment = TextAnchor.MiddleLeft;
+		}
+
+		RectTransform details = CreateImage(preview, "PreviewDetailsPanel", Hex("0A101EF0"), true,
+			Anchors.BottomStretch, Vector2.zero, new Vector2(0f, 140f), false);
+		details.anchorMin = new Vector2(0f, 0f);
+		details.anchorMax = new Vector2(1f, 0f);
+		details.pivot = new Vector2(0.5f, 0f);
+		details.anchoredPosition = Vector2.zero;
+		details.sizeDelta = new Vector2(0f, 140f);
+		details.gameObject.SetActive(false);
+
+		CreateImage(details, "PreviewDetailsAccent", Hex("38BDF8FF"), false,
+			Anchors.TopStretch, new Vector2(0f, 0f), new Vector2(0f, 2f), false);
+
+		CreateText(details, "PreviewDetails", "Detalhes...", 15, Color.white, TextAnchor.MiddleLeft,
+			Anchors.StretchAll, new Vector2(20f, -10f), new Vector2(-20f, -10f)).GetComponent<Text>().horizontalOverflow = HorizontalWrapMode.Wrap;
+	}
+
+	private static void CreateGearButton(Transform parent, string name, Vector2 pos, float size)
+	{
+		RectTransform rt = CreateImage(parent, name, Color.white, true,
+			Anchors.TopRight, pos, new Vector2(size, size), false);
+
+		Sprite gear = CreateGearSprite(64, Hex("D1D5DBFF"));
+		Image img = rt.GetComponent<Image>();
+		img.sprite = gear;
+		img.type = Image.Type.Simple;
+		img.preserveAspect = true;
+
+		Button button = rt.gameObject.AddComponent<Button>();
+		button.targetGraphic = img;
+		ColorBlock colors = button.colors;
+		colors.highlightedColor = Color.white;
+		colors.pressedColor = Hex("9CA3AFFF");
+		button.colors = colors;
+	}
+
+	private static Sprite CreateGearSprite(int size, Color color)
+	{
+		Texture2D tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
+		Color[] pixels = new Color[size * size];
+		Color transparent = new Color(0f, 0f, 0f, 0f);
+		float c = (size - 1) * 0.5f;
+		float outer = c * 0.78f;
+		float body = c * 0.60f;
+		float hole = c * 0.20f;
+		float toothH = c * 0.18f;
+		float toothW = 0.30f;
+
+		for (int y = 0; y < size; y++)
+		{
+			for (int x = 0; x < size; x++)
+			{
+				float dx = x - c;
+				float dy = y - c;
+				float d = Mathf.Sqrt(dx * dx + dy * dy);
+				bool solid = false;
+				if (d <= outer && d >= hole)
+				{
+					if (d <= body)
+					{
+						solid = true;
+					}
+					else
+					{
+						float angle = Mathf.Atan2(dy, dx);
+						float lobe = Mathf.Abs(Mathf.Cos(angle * 8f));
+						solid = d >= body - toothH * 0.4f && lobe > toothW;
+					}
+				}
+				pixels[y * size + x] = solid ? color : transparent;
+			}
+		}
+
+		tex.SetPixels(pixels);
+		tex.Apply();
+		Sprite sprite = Sprite.Create(tex, new Rect(0f, 0f, size, size), new Vector2(0.5f, 0.5f));
+		sprite.name = "GearIcon";
+		return sprite;
 	}
 
 	private static void CreateField(Transform parent, string text, float yPos)
