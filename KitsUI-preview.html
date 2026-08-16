@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>SimpleKits UI - Preview</title>
+<meta http-equiv="refresh" content="2">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0B0F1A; font-family:Arial, sans-serif; }
+  .tabs { position:fixed; top:8px; left:8px; z-index:10; display:flex; gap:8px; }
+  .tabs button { background:#0EA5E9; color:#fff; border:0; padding:10px 18px; font-weight:bold; font-size:14px; cursor:pointer; border-radius:4px; }
+  .tabs button.active { background:#059669; }
+  .stage { width:1920px; height:1080px; transform-origin:top left; position:relative; background:#000 url('https://cdn.jsdelivr.net/gh/Wuzuy/unturned-item-icons@master/vanilla/items/95.png') repeat; background-size:64px; background-blend-mode:overlay; }
+  .panel { position:absolute; background:rgba(14,21,36,0.96); border:1px solid rgba(56,189,248,0.15); border-radius:8px; color:#fff; }
+  .accent { position:absolute; background:#38BDF8; height:4px; left:0; width:100%; }
+  .title { position:absolute; text-align:center; font-weight:bold; color:#fff; }
+  .btn { position:absolute; text-align:center; font-weight:bold; color:#fff; border-radius:4px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .btn.blue { background:#0EA5E9; } .btn.gray { background:#334155; } .btn.red { background:#EF4444; }
+  .btn.green { background:#059669; } .btn.dark { background:#101A30; } .btn.disabled { background:#475569; }
+  .lbl { position:absolute; color:#94A3B8; text-align:center; font-size:18px; }
+  .input { position:absolute; background:#101A30; border-radius:4px; color:#fff; font-size:22px; font-weight:bold; padding:15px; }
+  .input .ph { color:#5B6B85; }
+  .kit { position:absolute; background:#17223A; border-radius:6px; overflow:hidden; }
+  .kit .kt { position:absolute; text-align:center; font-weight:bold; color:#fff; font-size:24px; width:100%; }
+  .kit .ka { position:absolute; background:#38BDF8; height:3px; width:100%; }
+  .kit .ki { position:absolute; width:88px; height:88px; image-rendering:pixelated; }
+  .kit .kp { position:absolute; color:#A8BFD9; font-size:15px; line-height:1.5; overflow:hidden; }
+  .kit .kc { position:absolute; color:#FBBF24; font-size:12px; text-align:center; width:100%; }
+  .kit .kcr { position:absolute; width:22px; height:22px; background:#FBBF24; border-radius:3px; display:none; }
+  .slot { position:absolute; background:#1E2B47; border-radius:4px; }
+  .slot .ic { position:absolute; width:64px; height:64px; image-rendering:pixelated; }
+  .slot .tx { position:absolute; color:#fff; font-size:13px; font-weight:bold; overflow:hidden; white-space:nowrap; }
+</style>
+</head>
+<body>
+<div class="tabs">
+  <button id="tabList" class="active" onclick="show('list')">1. LISTA DE KITS</button>
+  <button id="tabEdit" onclick="show('edit')">2. EDITOR</button>
+  <button id="tabVault" onclick="show('vault')">3. BAU VIRTUAL</button>
+</div>
+<div class="stage" id="stage">
+
+  <!-- ============ PAINEL: LISTA DE KITS (1560x900 em left 180 top 70; centro local 780,450) ============ -->
+  <div class="panel" id="pList" style="width:1560px;height:900px;left:180px;top:70px;">
+    <div class="title" style="left:0;top:42px;width:100%;height:60px;font-size:46px;">SIMPLE KITS</div>
+    <div class="accent" style="top:108px;"></div>
+    <div class="btn gray" style="left:810px;top:44px;width:250px;height:60px;font-size:16px;">PEGAR SEM ESPACO: OFF</div>
+    <div class="btn gray" style="left:1085px;top:44px;width:230px;height:60px;font-size:18px;">AUTO-EQUIP: ON</div>
+    <div class="btn red" style="left:1362px;top:44px;width:150px;height:60px;font-size:22px;">CLOSE</div>
+    <div class="lbl" style="left:710px;top:812px;width:140px;height:40px;font-size:24px;">01</div>
+    <div class="btn gray" style="left:48px;top:810px;width:90px;height:62px;font-size:26px;">&lt;</div>
+    <div class="btn gray" style="left:1422px;top:810px;width:90px;height:62px;font-size:26px;">&gt;</div>
+
+    <div class="kit" style="left:120px;top:120px;width:320px;height:280px;">
+      <div class="kt" style="top:10px;height:36px;">start</div><div class="ka" style="top:50px;"></div>
+      <img class="ki" src="https://cdn.jsdelivr.net/gh/Wuzuy/unturned-item-icons@master/vanilla/items/328.png" style="left:16px;top:58px;">
+      <div class="kp" style="left:116px;top:58px;width:188px;height:100px;">Locker x1</div>
+      <div class="kc" style="left:0;bottom:74px;height:24px;">READY</div>
+      <div class="btn green" style="left:50px;bottom:10px;width:220px;height:58px;font-size:21px;">CLAIM</div>
+    </div>
+    <div class="kit" style="left:453.3px;top:120px;width:320px;height:280px;">
+      <div class="kt" style="top:10px;height:36px;">medic</div><div class="ka" style="top:50px;"></div>
+      <img class="ki" src="https://cdn.jsdelivr.net/gh/Wuzuy/unturned-item-icons@master/vanilla/items/95.png" style="left:16px;top:58px;">
+      <div class="kp" style="left:116px;top:58px;width:188px;height:100px;">Bandage x2<br>Rope x3<br>Crossbow x1</div>
+      <div class="kc" style="left:0;bottom:74px;height:24px;">READY</div>
+      <div class="btn green" style="left:50px;bottom:10px;width:220px;height:58px;font-size:21px;">CLAIM</div>
+    </div>
+    <div class="kit" style="left:786.7px;top:120px;width:320px;height:280px;">
+      <div class="kt" style="top:10px;height:36px;">Kit 3</div><div class="ka" style="top:50px;"></div>
+      <div class="kp" style="left:116px;top:58px;width:188px;height:100px;color:#475569;">Sem itens</div>
+      <div class="kc" style="left:0;bottom:74px;height:24px;">READY</div>
+      <div class="btn disabled" style="left:50px;bottom:10px;width:220px;height:58px;font-size:21px;">SEM ITENS</div>
+    </div>
+    <div class="kit" style="left:1120px;top:120px;width:320px;height:280px;">
+      <div class="kt" style="top:10px;height:36px;">Kit 4</div><div class="ka" style="top:50px;"></div>
+      <img class="ki" src="https://cdn.jsdelivr.net/gh/Wuzuy/unturned-item-icons@master/vanilla/items/393.png" style="left:16px;top:58px;">
+      <div class="kp" style="left:116px;top:58px;width:188px;height:100px;">Rope x3</div>
+      <div class="kc" style="left:0;bottom:74px;height:24px;">READY</div>
+      <div class="btn green" style="left:50px;bottom:10px;width:220px;height:58px;font-size:21px;">CLAIM</div>
+    </div>
+    <div class="kit" style="left:120px;top:500px;width:320px;height:280px;">
+      <div class="kt" style="top:10px;height:36px;">Kit 5</div><div class="ka" style="top:50px;"></div>
+      <img class="ki" src="https://cdn.jsdelivr.net/gh/Wuzuy/unturned-item-icons@master/vanilla/items/394.png" style="left:16px;top:58px;">
+      <div class="kp" style="left:116px;top:58px;width:188px;height:100px;">Crossbow x1</div>
+      <div class="kc" style="left:0;bottom:74px;height:24px;">READY</div>
+      <div class="btn green" style="left:50px;bottom:10px;width:220px;height:58px;font-size:21px;">CLAIM</div>
+    </div>
+    <div class="kit" style="left:453.3px;top:500px;width:320px;height:280px;">
+      <div class="kt" style="top:10px;height:36px;">Kit 6</div><div class="ka" style="top:50px;"></div>
+      <div class="kp" style="left:116px;top:58px;width:188px;height:100px;color:#475569;">Sem itens</div>
+      <div class="kc" style="left:0;bottom:74px;height:24px;">READY</div>
+      <div class="btn disabled" style="left:50px;bottom:10px;width:220px;height:58px;font-size:21px;">SEM ITENS</div>
+    </div>
+    <div class="kit" style="left:786.7px;top:500px;width:320px;height:280px;">
+      <div class="kt" style="top:10px;height:36px;">Kit 7</div><div class="ka" style="top:50px;"></div>
+      <div class="kp" style="left:116px;top:58px;width:188px;height:100px;color:#475569;">Sem itens</div>
+      <div class="kc" style="left:0;bottom:74px;height:24px;">READY</div>
+      <div class="btn disabled" style="left:50px;bottom:10px;width:220px;height:58px;font-size:21px;">SEM ITENS</div>
+    </div>
+    <div class="kit" style="left:1120px;top:500px;width:320px;height:280px;">
+      <div class="kt" style="top:10px;height:36px;">Kit 8</div><div class="ka" style="top:50px;"></div>
+      <div class="kp" style="left:116px;top:58px;width:188px;height:100px;color:#475569;">Sem itens</div>
+      <div class="kc" style="left:0;bottom:74px;height:24px;">READY</div>
+      <div class="btn disabled" style="left:50px;bottom:10px;width:220px;height:58px;font-size:21px;">SEM ITENS</div>
+    </div>
+  </div>
+
+  <!-- ============ PAINEL: EDITOR (1560x900 em left 180 top 70; centro local 780,450) ============ -->
+  <div class="panel" id="pEdit" style="display:none;width:1560px;height:900px;left:180px;top:70px;">
+    <div class="title" style="left:0;top:26px;width:100%;height:48px;font-size:28px;">Criando novo kit</div>
+    <div class="accent" style="top:78px;"></div>
+    <div class="lbl" style="left:20px;top:126px;width:380px;height:60px;text-align:right;line-height:60px;font-size:18px;">Nome:</div>
+    <div class="input" style="left:400px;top:96px;width:760px;height:60px;">pvp</div>
+    <div class="lbl" style="left:20px;top:230px;width:380px;height:60px;text-align:right;font-size:18px;">Itens (formato: IDxQtd separado por vírgula - Ex.: 95x2,393x3,394x1):</div>
+    <div class="input" style="left:400px;top:200px;width:760px;height:60px;">95x2,393x3,394x1</div>
+    <div class="lbl" style="left:20px;top:334px;width:380px;height:60px;text-align:right;line-height:60px;font-size:18px;">Cooldown em segundos (0 = sem cooldown):</div>
+    <div class="input" style="left:400px;top:304px;width:760px;height:60px;">60</div>
+    <div class="lbl" style="left:20px;top:438px;width:380px;height:60px;text-align:right;line-height:60px;font-size:18px;">Prioridade (maior aparece primeiro):</div>
+    <div class="input" style="left:400px;top:408px;width:760px;height:60px;">1</div>
+    <div class="lbl" style="left:20px;top:542px;width:380px;height:60px;text-align:right;font-size:18px;">Permissão necessária (deixe vazio = todos podem):</div>
+    <div class="input" style="left:400px;top:512px;width:760px;height:60px;"><span class="ph">deixe vazio = todos</span></div>
+    <div class="btn blue" style="left:400px;top:598px;width:760px;height:56px;font-size:18px;">ABRIR BAÚ</div>
+    <div class="btn green" style="left:410px;top:744px;width:360px;height:60px;font-size:20px;">SALVAR</div>
+    <div class="btn red" style="left:790px;top:744px;width:360px;height:60px;font-size:20px;">CANCELAR</div>
+  </div>
+
+  <!-- ============ PAINEL: BAU VIRTUAL (1360x820 em left 280 top 110; centro local 680,410) ============ -->
+  <div class="panel" id="pVault" style="display:none;width:1360px;height:820px;left:280px;top:110px;">
+    <div class="title" style="left:0;top:28px;width:100%;height:46px;font-size:26px;">BAÚ VIRTUAL - CLIQUE NOS ITENS DO INVENTÁRIO</div>
+    <div class="lbl" style="left:0;top:80px;width:100%;height:28px;font-size:16px;">INVENTÁRIO  |  Depositados no kit: 3  |  Página 1/1</div>
+    <div class="btn blue" style="left:430px;top:95px;width:240px;height:50px;font-size:16px;">INVENTÁRIO</div>
+    <div class="btn gray" style="left:690px;top:95px;width:240px;height:50px;font-size:16px;">NO KIT</div>
+    <div class="slot" style="left:55px;top:155px;width:200px;height:96px;"><img class="ic" src="https://cdn.jsdelivr.net/gh/Wuzuy/unturned-item-icons@master/vanilla/items/95.png" style="left:10px;top:16px;"><div class="tx" style="left:86px;top:8px;right:12px;bottom:8px;line-height:80px;">Bandage x2</div></div>
+    <div class="slot" style="left:265px;top:155px;width:200px;height:96px;"><img class="ic" src="https://cdn.jsdelivr.net/gh/Wuzuy/unturned-item-icons@master/vanilla/items/393.png" style="left:10px;top:16px;"><div class="tx" style="left:86px;top:8px;right:12px;bottom:8px;line-height:80px;">Rope x3</div></div>
+    <div class="slot" style="left:475px;top:155px;width:200px;height:96px;"><img class="ic" src="https://cdn.jsdelivr.net/gh/Wuzuy/unturned-item-icons@master/vanilla/items/394.png" style="left:10px;top:16px;"><div class="tx" style="left:86px;top:8px;right:12px;bottom:8px;line-height:80px;">Crossbow x1</div></div>
+    <div class="slot" style="left:685px;top:155px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:895px;top:155px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:1105px;top:155px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:55px;top:261px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:265px;top:261px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:475px;top:261px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:685px;top:261px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:895px;top:261px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:1105px;top:261px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:55px;top:367px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:265px;top:367px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:475px;top:367px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:685px;top:367px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:895px;top:367px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:1105px;top:367px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:55px;top:473px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:265px;top:473px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:475px;top:473px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:685px;top:473px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:895px;top:473px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:1105px;top:473px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:55px;top:579px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:265px;top:579px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:475px;top:579px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:685px;top:579px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:895px;top:579px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="slot" style="left:1105px;top:579px;width:200px;height:96px;"><div class="tx" style="left:12px;top:8px;right:12px;bottom:8px;line-height:80px;color:#64748B;">Vazio</div></div>
+    <div class="btn gray" style="left:165px;top:732px;width:150px;height:54px;font-size:26px;">&lt;</div>
+    <div class="btn gray" style="left:1045px;top:732px;width:150px;height:54px;font-size:26px;">&gt;</div>
+    <div class="btn green" style="left:270px;top:732px;width:820px;height:54px;font-size:18px;">FECHAR BAU E VOLTAR AO EDITOR</div>
+  </div>
+
+</div>
+<script>
+  function show(p){
+    document.getElementById('pList').style.display = p==='list' ? 'block':'none';
+    document.getElementById('pEdit').style.display = p==='edit' ? 'block':'none';
+    document.getElementById('pVault').style.display = p==='vault' ? 'block':'none';
+    document.getElementById('tabList').className = p==='list'?'active':'';
+    document.getElementById('tabEdit').className = p==='edit'?'active':'';
+    document.getElementById('tabVault').className = p==='vault'?'active':'';
+  }
+  function fit(){
+    var s = Math.min(1, (window.innerWidth-16)/1920, (window.innerHeight-60)/1080);
+    document.getElementById('stage').style.transform = 'scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit);
+  fit();
+</script>
+</body>
+</html>

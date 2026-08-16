@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Translations xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Translation Id="ui_title" Value="Simple Kits" />
+  <Translation Id="ui_ready" Value="READY" />
+  <Translation Id="ui_empty" Value="SEM ITENS" />
+  <Translation Id="kit_uso" Value="Usage: /kit &lt;name&gt;" />
+  <Translation Id="kit_nao_existe" Value="The kit &quot;{0}&quot; does not exist. Use /kits to see the available kits." />
+  <Translation Id="kit_entregue" Value="Kit &quot;{0}&quot; delivered!" />
+  <Translation Id="kit_erro" Value="Could not deliver kit &quot;{0}&quot; (invalid item)." />
+  <Translation Id="kit_cooldown" Value="Kit &quot;{0}&quot; is on cooldown. {1} second(s) remaining." />
+  <Translation Id="kit_sem_permissao" Value="You do not have permission to claim kit &quot;{0}&quot;." />
+  <Translation Id="kits_lista" Value="Available kits: {0}" />
+  <Translation Id="kits_vazio" Value="No kits configured." />
+  <Translation Id="kits_admin_sem_perm" Value="Voce precisa da permissao &quot;{0}&quot; para gerenciar kits." />
+  <Translation Id="kits_admin_acao_invalida" Value="Acao desconhecida: {0}." />
+  <Translation Id="kits_admin_add_uso" Value="Uso: /kits admin add &lt;nome&gt; [cooldown] [prioridade] [permissao]" />
+  <Translation Id="kits_admin_remove_uso" Value="Uso: /kits admin remove &lt;nome&gt;" />
+  <Translation Id="kits_admin_additem_uso" Value="Uso: /kits admin additem &lt;nome&gt; &lt;itemID&gt; [quantidade]" />
+  <Translation Id="kits_admin_removeitem_uso" Value="Uso: /kits admin removeitem &lt;nome&gt; &lt;itemID&gt;" />
+  <Translation Id="kits_admin_set_uso" Value="Uso: /kits admin set &lt;nome&gt; &lt;cooldown|prioridade|permissao|nome&gt; &lt;valor&gt;" />
+  <Translation Id="kits_admin_id_invalido" Value="Item ID invalido: {0}." />
+  <Translation Id="kits_admin_valor_invalido" Value="Valor invalido para &quot;{0}&quot;." />
+  <Translation Id="kits_admin_campo_invalido" Value="Campo invalido: {0}. Use cooldown, prioridade, permissao ou nome." />
+  <Translation Id="kit_add_ok" Value="Kit &quot;{0}&quot; criado! Use /kits admin additem para adicionar itens." />
+  <Translation Id="kit_add_duplicado" Value="Ja existe um kit chamado &quot;{0}&quot;." />
+  <Translation Id="kit_remove_ok" Value="Kit &quot;{0}&quot; removido." />
+  <Translation Id="kit_additem_ok" Value="Item {1} x{2} adicionado ao kit &quot;{0}&quot;." />
+  <Translation Id="kit_additem_invalido" Value="Item ID {1} nao existe no jogo (nao adicionado ao kit &quot;{0}&quot;)." />
+  <Translation Id="kit_removeitem_ok" Value="Item {1} removido do kit &quot;{0}&quot;." />
+  <Translation Id="kit_removeitem_ausente" Value="O item {1} nao esta no kit &quot;{0}&quot;." />
+  <Translation Id="kit_set_ok" Value="Kit &quot;{0}&quot; atualizado: {1} = {2}." />
+  <Translation Id="kit_ui_salvo" Value="Kit &quot;{0}&quot; salvo com sucesso!" />
+  <Translation Id="kit_ui_criado" Value="Kit &quot;{0}&quot; criado com sucesso!" />
+  <Translation Id="kit_ui_removido" Value="Kit &quot;{0}&quot; removido." />
+  <Translation Id="kit_ui_nome_vazio" Value="O nome do kit nao pode ser vazio." />
+  <Translation Id="kit_ui_item_invalido" Value="Item invalido: {0}. Formato: IDxQtd (ex.: 95x2,393x3)." />
+  <Translation Id="kit_ui_cooldown_invalido" Value="Cooldown invalido." />
+  <Translation Id="kit_ui_prioridade_invalida" Value="Prioridade invalida." />
+  <Translation Id="kit_ui_titulo_criar" Value="Criando novo kit" />
+  <Translation Id="kit_ui_titulo_editar" Value="Editando: {0}" />
+  <Translation Id="kits_admin_alias" Value="Dica: voce tambem pode usar /kitsadmin (mesma coisa que /kits admin)." />
+  <Translation Id="ui_auto_on" Value="AUTO-EQUIP: ON" />
+  <Translation Id="ui_auto_off" Value="AUTO-EQUIP: OFF" />
+  <Translation Id="ui_overflow_on" Value="PEGAR SEM ESPACO: ON" />
+  <Translation Id="ui_overflow_off" Value="PEGAR SEM ESPACO: OFF" />
+  <Translation Id="kit_ui_mao_vazia" Value="Voce nao esta segurando nenhum item." />
+  <Translation Id="kit_ui_mao_ok" Value="Item {0} adicionado ao kit (1x)." />
+  <Translation Id="kit_vault_aberto" Value="Baú aberto! Arraste itens do seu inventario para o bau e feche (F ou ESC) para gravar no kit. Os itens do bau SUBSTITUEM os itens atuais do kit." />
+  <Translation Id="kit_vault_fechado" Value="Baú fechado! {0} item(ns) salvo(s) no kit &quot;{1}&quot;." />
+  <Translation Id="kit_vault_vazio" Value="Baú fechado sem itens. O kit &quot;{0}&quot; ficou sem itens." />
+  <Translation Id="kit_vault_erro" Value="Nao foi possivel criar o bau (baú do jogo não encontrado)." />
+  <Translation Id="kit_vault_depositado" Value="Depositado no kit: {0} (ID {1}) x{2}." />
+  <Translation Id="kit_vault_virtual" Value="Baú do jogo indisponível nesta versão; usando baú virtual. Clique nos itens do inventario para depositar no kit." />
+  <Translation Id="kit_vault_devolvido" Value="Devolvido ao inventário: {0} (ID {1}) x{2}." />
+  <Translation Id="kit_vault_cheio" Value="Inventario cheio! O item nao foi devolvido." />
+  <Translation Id="kit_sem_espaco" Value="Kit &quot;{0}&quot; bloqueado: nao ha espaco suficiente no inventario. O cooldown nao foi consumido." />
+  <Translation Id="kit_itens_dropados" Value="Kit &quot;{0}&quot; entregue. {1} item(ns) cairam no chao por falta de espaco." />
+</Translations>
