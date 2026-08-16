@@ -9,6 +9,9 @@ namespace SimpleKits
 		[XmlAttribute("Name")]
 		public string Name { get; set; }
 
+		[XmlAttribute("IconUrl")]
+		public string IconUrl { get; set; }
+
 		public int CooldownSeconds { get; set; }
 
 		public string Permission { get; set; }

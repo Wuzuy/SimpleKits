@@ -110,6 +110,19 @@ namespace SimpleKits
 			{ "ui_auto_off", "AUTO-EQUIP: OFF" },
 			{ "ui_overflow_on", "PEGAR SEM ESPACO: ON" },
 			{ "ui_overflow_off", "PEGAR SEM ESPACO: OFF" },
+			{ "ui_on", "ON" },
+			{ "ui_off", "OFF" },
+			{ "tip_auto_equip", "AUTO-EQUIP\nON: itens do kit são equipados automaticamente (arma na mão, roupas vestidas).\nOFF: todos os itens vão direto para o inventário." },
+			{ "tip_overflow", "PEGAR SEM ESPAÇO\nON: se não couber no inventário, o que sobrar cai no chão e o cooldown é consumido.\nOFF: se não houver espaço, o resgate é bloqueado e o cooldown NÃO é consumido." },
+			{ "detail_mira", "Mira" },
+			{ "detail_tatico", "Tático" },
+			{ "detail_grip", "Grip" },
+			{ "detail_cano", "Cano" },
+			{ "detail_pente", "Pente" },
+			{ "detail_municao", "Munição: {0}/{1}" },
+			{ "detail_sem_estado", "sem acessórios armazenados" },
+			{ "ui_overflow_on", "PEGAR SEM ESPACO: ON" },
+			{ "ui_overflow_off", "PEGAR SEM ESPACO: OFF" },
 			{ "kit_ui_mao_vazia", "Voce nao esta segurando nenhum item." },
 			{ "kit_ui_mao_ok", "Item {0} adicionado ao kit (1x)." },
 			{ "kit_vault_aberto", "Bau aberto! Arraste itens do seu inventario para o bau e feche (F ou ESC) para gravar no kit. Os itens do bau SUBSTITUEM os itens atuais do kit." },
@@ -186,6 +199,57 @@ namespace SimpleKits
 			}
 
 			return string.Join("\n", parts);
+		}
+
+		public string GetKitDetailsText(Kit kit)
+		{
+			List<string> lines = new List<string>();
+
+			foreach (KitItem kitItem in kit.Items)
+			{
+				ItemAsset asset = Assets.find(EAssetType.ITEM, kitItem.ItemID) as ItemAsset;
+				if (asset == null)
+				{
+					continue;
+				}
+
+				string name = !string.IsNullOrEmpty(asset.itemName) ? asset.itemName : ("#" + kitItem.ItemID);
+				lines.Add(name + " x" + kitItem.Amount);
+
+				if (asset.type != EItemType.GUN)
+				{
+					continue;
+				}
+
+				byte[] state = kitItem.StateBytes;
+				if (state == null || state.Length < 10)
+				{
+					lines.Add("  " + Translate("detail_sem_estado"));
+					continue;
+				}
+
+				lines.Add("  " + AttachmentLine(Translate("detail_mira"), BitConverter.ToUInt16(state, 0)));
+				lines.Add("  " + AttachmentLine(Translate("detail_tatico"), BitConverter.ToUInt16(state, 2)));
+				lines.Add("  " + AttachmentLine(Translate("detail_grip"), BitConverter.ToUInt16(state, 4)));
+				lines.Add("  " + AttachmentLine(Translate("detail_cano"), BitConverter.ToUInt16(state, 6)));
+				lines.Add("  " + AttachmentLine(Translate("detail_pente"), BitConverter.ToUInt16(state, 8)));
+				int ammo = state.Length > 10 ? state[10] : 0;
+				int ammoMax = asset is ItemGunAsset gun ? gun.ammoMax : 0;
+				lines.Add("  " + Translate("detail_municao", ammo, ammoMax));
+			}
+
+			return string.Join("\n", lines);
+		}
+
+		private static string AttachmentLine(string label, ushort id)
+		{
+			if (id == 0)
+			{
+				return label + ": —";
+			}
+			ItemAsset asset = Assets.find(EAssetType.ITEM, id) as ItemAsset;
+			string name = asset != null && !string.IsNullOrEmpty(asset.itemName) ? asset.itemName : ("#" + id);
+			return label + ": " + name;
 		}
 
 		public bool TryClaimKit(Player player, Kit kit, bool bypassCooldown = false)

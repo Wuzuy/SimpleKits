@@ -63,7 +63,7 @@ namespace SimpleKits
 			UnturnedChat.Say(caller, "  remove <nome>");
 			UnturnedChat.Say(caller, "  additem <nome> <itemID> [quantidade]");
 			UnturnedChat.Say(caller, "  removeitem <nome> <itemID>");
-			UnturnedChat.Say(caller, "  set <nome> <cooldown|prioridade|permissao|nome> <valor>");
+			UnturnedChat.Say(caller, "  set <nome> <cooldown|prioridade|permissao|nome|icon> <valor>");
 			UnturnedChat.Say(caller, "  list");
 		}
 
@@ -235,6 +235,10 @@ namespace SimpleKits
 				case "permissao":
 				case "permission":
 					kit.Permission = value == "-" || value.Length == 0 ? null : value;
+					break;
+				case "icon":
+				case "icone":
+					kit.IconUrl = value == "-" || value.Length == 0 ? null : value;
 					break;
 				case "nome":
 				case "name":

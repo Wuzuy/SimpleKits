@@ -5,6 +5,8 @@ using SDG.Framework.Modules;
 using SDG.Unturned;
 using Steamworks;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace UnturnedItemIcons
 {
@@ -16,6 +18,7 @@ namespace UnturnedItemIcons
 			GameObject go = new GameObject("UnturnedItemIcons");
 			UnityEngine.Object.DontDestroyOnLoad(go);
 			go.AddComponent<IconCaptureDriver>();
+			go.AddComponent<KitUIHook>();
 		}
 
 		public void shutdown()
@@ -121,11 +124,6 @@ namespace UnturnedItemIcons
 			if (!Dedicator.isDedicated && Input.GetKeyDown(KeyCode.F8))
 			{
 				ForceRecapture();
-			}
-
-			if (!Dedicator.isDedicated && Input.GetKeyDown(KeyCode.Escape) && Player.LocalPlayer != null && Player.LocalPlayer.inPluginModal)
-			{
-				EffectManager.sendEffectClicked("BExit");
 			}
 
 			if (handleDeadline.Count > 0)
@@ -299,6 +297,136 @@ namespace UnturnedItemIcons
 				failed++;
 				UnturnedLog.error("[UnturnedItemIcons] Falha ao salvar o item " + asset.id + ": " + ex.Message);
 			}
+		}
+	}
+
+	public class KitUIHook : MonoBehaviour
+	{
+		private bool kitsUiOpen;
+		private float nextScan = 1f;
+		private int lastEscSendFrame = -1;
+
+		private void Update()
+		{
+			if (Dedicator.isDedicated)
+			{
+				return;
+			}
+
+			nextScan -= Time.deltaTime;
+			if (nextScan <= 0f)
+			{
+				nextScan = 0.75f;
+				ScanUi();
+			}
+
+			if (kitsUiOpen && Input.GetKeyDown(KeyCode.Escape) && lastEscSendFrame != Time.frameCount)
+			{
+				lastEscSendFrame = Time.frameCount;
+				UnturnedLog.info("[UnturnedItemIcons] ESC detectado - fechando UI de kits.");
+				EffectManager.sendEffectClicked("BExit");
+			}
+		}
+
+		private void OnGUI()
+		{
+			if (Dedicator.isDedicated || !kitsUiOpen || lastEscSendFrame == Time.frameCount)
+			{
+				return;
+			}
+
+			Event current = Event.current;
+			if (current != null && current.type == EventType.KeyDown && current.keyCode == KeyCode.Escape)
+			{
+				lastEscSendFrame = Time.frameCount;
+				UnturnedLog.info("[UnturnedItemIcons] ESC (OnGUI) detectado - fechando UI de kits.");
+				EffectManager.sendEffectClicked("BExit");
+			}
+		}
+
+		private void ScanUi()
+		{
+			bool nowOpen = false;
+			Button[] buttons = UnityEngine.Object.FindObjectsOfType<Button>();
+			foreach (Button button in buttons)
+			{
+				if (button == null || button.name == null)
+				{
+					continue;
+				}
+
+				if (button.name == "BExit")
+				{
+					nowOpen = true;
+					continue;
+				}
+
+				if (IsPreviewButton(button.name) && button.GetComponent<PreviewRmbHook>() == null)
+				{
+					int kitNumber = ExtractKitNumber(button.name);
+					if (kitNumber > 0)
+					{
+						PreviewRmbHook hook = button.gameObject.AddComponent<PreviewRmbHook>();
+						hook.KitNumber = kitNumber;
+					}
+				}
+			}
+
+			if (nowOpen == kitsUiOpen)
+			{
+				return;
+			}
+
+			kitsUiOpen = nowOpen;
+			if (kitsUiOpen)
+			{
+				PlayerLifeUI.crosshair.SetDirectionalArrowsVisible(false);
+				PlayerLifeUI.crosshair.SetPluginAllowsCenterDotVisible(false);
+				UnturnedLog.info("[UnturnedItemIcons] UI de kits aberta - crosshair oculto.");
+			}
+			else
+			{
+				PlayerLifeUI.crosshair.SetDirectionalArrowsVisible(true);
+				PlayerLifeUI.crosshair.SetPluginAllowsCenterDotVisible(
+					Player.LocalPlayer != null && Player.LocalPlayer.isPluginWidgetFlagActive(EPluginWidgetFlags.ShowCenterDot));
+				UnturnedLog.info("[UnturnedItemIcons] UI de kits fechada - crosshair restaurado.");
+			}
+		}
+
+		private static bool IsPreviewButton(string name)
+		{
+			return (name.StartsWith("Player_Kit") || name.StartsWith("ADM_Kit")) && name.EndsWith("_Preview");
+		}
+
+		private static int ExtractKitNumber(string name)
+		{
+			int kitPos = name.IndexOf("Kit");
+			if (kitPos < 0)
+			{
+				return 0;
+			}
+			int digitPos = kitPos + 3;
+			if (digitPos >= name.Length || !char.IsDigit(name[digitPos]))
+			{
+				return 0;
+			}
+			return name[digitPos] - '0';
+		}
+	}
+
+	public class PreviewRmbHook : MonoBehaviour, IPointerClickHandler
+	{
+		public int KitNumber;
+
+		public void OnPointerClick(PointerEventData eventData)
+		{
+			if (eventData == null || eventData.button != PointerEventData.InputButton.Right || KitNumber <= 0)
+			{
+				return;
+			}
+
+			UnturnedLog.info("[UnturnedItemIcons] Clique direito no VISUALIZAR do kit " + KitNumber + " - enviando detalhes.");
+			EffectManager.sendEffectClicked("KitDetail" + KitNumber);
 		}
 	}
 }

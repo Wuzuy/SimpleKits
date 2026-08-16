@@ -22,6 +22,9 @@ namespace SimpleKits
 		private Kit editKit;
 		private Kit editingSource;
 		private string itemsText;
+		private bool settingsPanelOpen;
+		private bool previewPanelOpen;
+		private bool previewDetailMode;
 
 		private struct VaultEntry
 		{
@@ -95,20 +98,22 @@ namespace SimpleKits
 			EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, "BExit", !hasBypass);
 			EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, "backgroundfalseexit", true);
 			EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, "Exit", hasBypass);
-			EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, "AutoEquipLabel",
-				plugin.GetAutoEquip(Owner) ? plugin.Translate("ui_auto_on") : plugin.Translate("ui_auto_off"));
-			EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, "AllowOverflowLabel",
-				plugin.GetAllowOverflow(Owner) ? plugin.Translate("ui_overflow_on") : plugin.Translate("ui_overflow_off"));
+			EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, "SetAutoEquipLabel",
+				plugin.GetAutoEquip(Owner) ? plugin.Translate("ui_on") : plugin.Translate("ui_off"));
+			EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, "SetOverflowLabel",
+				plugin.GetAllowOverflow(Owner) ? plugin.Translate("ui_on") : plugin.Translate("ui_off"));
 
 			for (int i = 1; i <= 8; i++)
 			{
 				EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, $"Kit{i}_Extension [PLAYER]", !hasBypass);
 				EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, $"Player_Kit{i}_ClaimP", !hasBypass);
 				EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, $"Player_Kit{i}_ClaimP [DISABLED]", !hasBypass);
+				EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, $"Player_Kit{i}_Preview", !hasBypass);
 				EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, $"Kit{i}_Extension", hasBypass);
 				EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, $"ADM_Kit{i}_Claim", hasBypass);
 				EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, $"ADM_Kit{i}_Edit", hasBypass);
 				EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, $"ADM_Kit{i}_Delete", hasBypass);
+				EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, $"ADM_Kit{i}_Preview", hasBypass);
 			}
 
 			EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, "Create/Edit (Kit)", false);
@@ -149,6 +154,18 @@ namespace SimpleKits
 				return;
 			}
 
+			if (buttonName.EndsWith("_Preview"))
+			{
+				HandlePreviewButton(buttonName, false);
+				return;
+			}
+
+			if (buttonName.StartsWith("KitDetail"))
+			{
+				HandlePreviewButton(buttonName, true);
+				return;
+			}
+
 			if (buttonName.StartsWith("VaultSlot"))
 			{
 				if (hasBypass && vaultPanelOpen)
@@ -166,17 +183,45 @@ namespace SimpleKits
 						OpenEditor(null);
 					}
 					return;
-				case "AutoEquip":
+				case "Settings":
+					if (settingsPanelOpen)
+					{
+						CloseSettings();
+					}
+					else
+					{
+						OpenSettings();
+					}
+					return;
+				case "SettingsClose":
+					if (settingsPanelOpen)
+					{
+						CloseSettings();
+					}
+					return;
+				case "SetAutoEquip":
 					bool enabled = !plugin.GetAutoEquip(Owner);
 					plugin.SetAutoEquip(Owner, enabled);
-					EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, "AutoEquipLabel",
-						enabled ? plugin.Translate("ui_auto_on") : plugin.Translate("ui_auto_off"));
+					EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, "SetAutoEquipLabel",
+						enabled ? plugin.Translate("ui_on") : plugin.Translate("ui_off"));
 					return;
-				case "AllowOverflow":
+				case "SetOverflow":
 					bool allowOverflow = !plugin.GetAllowOverflow(Owner);
 					plugin.SetAllowOverflow(Owner, allowOverflow);
-					EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, "AllowOverflowLabel",
-						allowOverflow ? plugin.Translate("ui_overflow_on") : plugin.Translate("ui_overflow_off"));
+					EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, "SetOverflowLabel",
+						allowOverflow ? plugin.Translate("ui_on") : plugin.Translate("ui_off"));
+					return;
+				case "InfoAutoEquip":
+					ToggleTooltip(plugin.Translate("tip_auto_equip"));
+					return;
+				case "InfoOverflow":
+					ToggleTooltip(plugin.Translate("tip_overflow"));
+					return;
+				case "PreviewClose":
+					if (previewPanelOpen)
+					{
+						ClosePreview();
+					}
 					return;
 				case "OpenVault":
 					if (hasBypass && IsEditing && !vaultPanelOpen)
@@ -245,7 +290,15 @@ namespace SimpleKits
 					{
 						return;
 					}
-					if (vaultPanelOpen)
+					if (settingsPanelOpen)
+					{
+						CloseSettings();
+					}
+					else if (previewPanelOpen)
+					{
+						ClosePreview();
+					}
+					else if (vaultPanelOpen)
 					{
 						CloseVault();
 					}
@@ -319,7 +372,129 @@ namespace SimpleKits
 				case "KitPerm":
 					editKit.Permission = text.Trim() == "-" || text.Trim().Length == 0 ? null : text.Trim();
 					break;
+				case "KitIcon":
+					string icon = text.Trim();
+					editKit.IconUrl = icon == "-" || icon.Length == 0 ? null : icon;
+					break;
 			}
+		}
+
+		private void OpenSettings()
+		{
+			settingsPanelOpen = true;
+			EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, "KitsUIPanel", false);
+			EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, "SettingsPanel", true);
+			EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, "SetAutoEquipLabel",
+				plugin.GetAutoEquip(Owner) ? plugin.Translate("ui_on") : plugin.Translate("ui_off"));
+			EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, "SetOverflowLabel",
+				plugin.GetAllowOverflow(Owner) ? plugin.Translate("ui_on") : plugin.Translate("ui_off"));
+		}
+
+		private void CloseSettings()
+		{
+			settingsPanelOpen = false;
+			EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, "TipInfo", false);
+			EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, "SettingsPanel", false);
+			EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, "KitsUIPanel", true);
+			UpdatePage();
+		}
+
+		private void ToggleTooltip(string text)
+		{
+			EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, "TipInfoText", text);
+			EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, "TipInfo", true);
+		}
+
+		private void HandlePreviewButton(string buttonName, bool detail)
+		{
+			int kitPos = buttonName.IndexOf("Kit");
+			if (kitPos < 0)
+			{
+				return;
+			}
+			int digitPos = kitPos + 3;
+			if (digitPos >= buttonName.Length || !char.IsDigit(buttonName[digitPos]))
+			{
+				return;
+			}
+
+			int slotNumber = int.Parse(buttonName[digitPos].ToString());
+			List<Kit> visible = VisibleKits;
+			int pageCount = Math.Min(8, visible.Count - actualPage * 8);
+			if (pageCount < 0)
+			{
+				pageCount = 0;
+			}
+			int kitOnPage = Array.IndexOf(MapVisibleSlots(pageCount), slotNumber);
+			if (kitOnPage < 0 || actualPage * 8 + kitOnPage >= visible.Count)
+			{
+				return;
+			}
+
+			OpenPreview(visible[actualPage * 8 + kitOnPage], detail);
+		}
+
+		private void OpenPreview(Kit kit, bool detail)
+		{
+			previewPanelOpen = true;
+			previewDetailMode = detail;
+			EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, "KitsUIPanel", false);
+			EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, "PreviewPanel", true);
+			EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, "PreviewTitle", kit.Name);
+			RenderPreview(kit, detail);
+		}
+
+		private void RenderPreview(Kit kit, bool detail)
+		{
+			pendingIconKeys.Clear();
+			pendingIconUrls.Clear();
+
+			List<KitItem> kitItems = kit.Items ?? new List<KitItem>();
+			for (int i = 0; i < 30; i++)
+			{
+				if (i < kitItems.Count)
+				{
+					KitItem kitItem = kitItems[i];
+					ItemAsset asset = Assets.find(EAssetType.ITEM, kitItem.ItemID) as ItemAsset;
+					string name = asset != null && !string.IsNullOrEmpty(asset.itemName) ? asset.itemName : "Item " + kitItem.ItemID;
+					string text = ColorName(asset, name) + StateSuffix(asset, kitItem.StateBytes) + "\nID " + kitItem.ItemID + " x" + kitItem.Amount;
+					EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, "PreviewSlot" + i, true);
+					EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, "PreviewSlot" + i + "_Label", text);
+					string iconUrl = ItemIconUrl(kitItem.ItemID);
+					if (!string.IsNullOrEmpty(iconUrl) && !sentVaultIconUrls.Contains(iconUrl))
+					{
+						pendingIconKeys.Add("PreviewSlot" + i + "_Icon");
+						pendingIconUrls.Add(iconUrl);
+					}
+				}
+				else
+				{
+					EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, "PreviewSlot" + i, true);
+					EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, "PreviewSlot" + i + "_Label", "<color=#64748BFF>Vazio</color>");
+					EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, "PreviewSlot" + i + "_Icon", false);
+				}
+			}
+
+			QueueVaultIcons();
+
+			EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, "PreviewDetailsPanel", detail);
+			if (detail)
+			{
+				EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, "PreviewDetails", plugin.GetKitDetailsText(kit));
+			}
+		}
+
+		private void ClosePreview()
+		{
+			previewPanelOpen = false;
+			previewDetailMode = false;
+			StopVaultIconSender();
+			pendingIconKeys.Clear();
+			pendingIconUrls.Clear();
+			EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, "PreviewPanel", false);
+			EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, "PreviewDetailsPanel", false);
+			EffectManager.sendUIEffectVisibility(UI_KEY, TransportConnection, true, "KitsUIPanel", true);
+			UpdatePage();
 		}
 
 		private void HandleClaim(string buttonName)
@@ -408,8 +583,17 @@ namespace SimpleKits
 				EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, $"Kit{slotNumber}_Title", kit.Name);
 				EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, $"Kit{slotNumber}_Price", plugin.GetKitContentsText(kit));
 
-				ushort kitIconId = kit.Items != null && kit.Items.Count > 0 ? kit.Items[0].ItemID : (ushort)0;
-				string kitIconUrl = kitIconId > 0 ? ItemIconUrl(kitIconId) : null;
+				ushort kitIconId = 0;
+				string kitIconUrl = null;
+				if (kit.IconUrl != null && (kit.IconUrl.StartsWith("http://") || kit.IconUrl.StartsWith("https://")))
+				{
+					kitIconUrl = kit.IconUrl;
+				}
+				else if (kit.Items != null && kit.Items.Count > 0)
+				{
+					kitIconId = kit.Items[0].ItemID;
+					kitIconUrl = ItemIconUrl(kitIconId);
+				}
 				if (!string.IsNullOrEmpty(kitIconUrl))
 				{
 					Rocket.Core.Logging.Logger.Log($"[SimpleKits] IconURL Kit{slotNumber}_Icon -> " + kitIconUrl);
@@ -851,8 +1035,25 @@ namespace SimpleKits
 			ItemAsset asset = Assets.find(EAssetType.ITEM, item.id) as ItemAsset;
 
 			byte[] state = item.state;
+			bool wholeStack = asset != null && asset.type == EItemType.MAGAZINE;
+			int depositAmount = wholeStack ? Math.Max(1, (int)item.amount) : 1;
 
-			if (item.amount > 1)
+			if (wholeStack)
+			{
+				if (Owner.equipment.equippedPage == entry.Page)
+				{
+					byte width = Owner.inventory.getWidth(entry.Page);
+					byte x = (byte)(entry.Index % width);
+					byte y = (byte)(entry.Index / width);
+					if (Owner.equipment.equipped_x == x && Owner.equipment.equipped_y == y)
+					{
+						Owner.equipment.dequip();
+					}
+				}
+
+				Owner.inventory.removeItem(entry.Page, entry.Index);
+			}
+			else if (item.amount > 1)
 			{
 				item.amount -= 1;
 				Owner.inventory.updateAmount(entry.Page, entry.Index, item.amount);
@@ -881,16 +1082,16 @@ namespace SimpleKits
 			KitItem existing = editKit.Items.FirstOrDefault(k => k.ItemID == item.id && string.Equals(k.State, stateB64));
 			if (existing != null)
 			{
-				existing.Amount += 1;
+				existing.Amount = (byte)Math.Min(255, existing.Amount + depositAmount);
 			}
 			else
 			{
-				editKit.Items.Add(new KitItem { ItemID = item.id, Amount = 1, State = stateB64 });
+				editKit.Items.Add(new KitItem { ItemID = item.id, Amount = (byte)depositAmount, State = stateB64 });
 			}
 			itemsText = string.Join(",", editKit.Items.Select(k => k.ItemID + "x" + k.Amount));
 
 			string name = asset != null && !string.IsNullOrEmpty(asset.itemName) ? asset.itemName : "Item " + item.id;
-			UnturnedChat.Say(UnturnedPlayer.FromSteamPlayer(Owner.channel.owner), plugin.Translate("kit_vault_depositado", name, item.id, 1));
+			UnturnedChat.Say(UnturnedPlayer.FromSteamPlayer(Owner.channel.owner), plugin.Translate("kit_vault_depositado", name, item.id, depositAmount));
 
 			RenderVault();
 		}
@@ -912,13 +1113,16 @@ namespace SimpleKits
 				return;
 			}
 
-			if (!Owner.inventory.tryAddItem(new Item(kitItem.ItemID, 1, 100, kitItem.StateBytes), false))
+			bool wholeStack = asset.type == EItemType.MAGAZINE;
+			int returnAmount = wholeStack ? Math.Max(1, (int)kitItem.Amount) : 1;
+
+			if (!Owner.inventory.tryAddItem(new Item(kitItem.ItemID, (byte)returnAmount, 100, kitItem.StateBytes), false))
 			{
 				UnturnedChat.Say(UnturnedPlayer.FromSteamPlayer(Owner.channel.owner), plugin.Translate("kit_vault_cheio"));
 				return;
 			}
 
-			kitItem.Amount -= 1;
+			kitItem.Amount = (byte)Math.Max(0, kitItem.Amount - returnAmount);
 			if (kitItem.Amount <= 0)
 			{
 				kitItems.Remove(kitItem);
@@ -926,7 +1130,7 @@ namespace SimpleKits
 			itemsText = string.Join(",", kitItems.Select(k => k.ItemID + "x" + k.Amount));
 
 			string name = !string.IsNullOrEmpty(asset.itemName) ? asset.itemName : "Item " + kitItem.ItemID;
-			UnturnedChat.Say(UnturnedPlayer.FromSteamPlayer(Owner.channel.owner), plugin.Translate("kit_vault_devolvido", name, kitItem.ItemID, 1));
+			UnturnedChat.Say(UnturnedPlayer.FromSteamPlayer(Owner.channel.owner), plugin.Translate("kit_vault_devolvido", name, kitItem.ItemID, returnAmount));
 
 			RenderVault();
 		}
@@ -975,6 +1179,7 @@ namespace SimpleKits
 			EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, "KitCooldown", editKit.CooldownSeconds.ToString());
 			EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, "KitPriority", editKit.Priority.ToString());
 			EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, "KitPerm", editKit.Permission ?? "");
+			EffectManager.sendUIEffectText(UI_KEY, TransportConnection, true, "KitIcon", editKit.IconUrl ?? "");
 		}
 
 		private void SaveEditor()

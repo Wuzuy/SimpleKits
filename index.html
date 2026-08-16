@@ -21,6 +21,7 @@
   .input { position:absolute; background:#101A30; border-radius:4px; color:#fff; font-size:22px; font-weight:bold; padding:15px; }
   .input .ph { color:#5B6B85; }
   .kit { position:absolute; background:#17223A; border-radius:6px; overflow:hidden; }
+  .gear { position:absolute; text-align:center; font-weight:bold; color:#D1D5DB; cursor:pointer; line-height:60px; }
   .kit .kt { position:absolute; text-align:center; font-weight:bold; color:#fff; font-size:24px; width:100%; }
   .kit .ka { position:absolute; background:#38BDF8; height:3px; width:100%; }
   .kit .ki { position:absolute; width:88px; height:88px; image-rendering:pixelated; }
@@ -37,6 +38,7 @@
   <button id="tabList" class="active" onclick="show('list')">1. LISTA DE KITS</button>
   <button id="tabEdit" onclick="show('edit')">2. EDITOR</button>
   <button id="tabVault" onclick="show('vault')">3. BAU VIRTUAL</button>
+  <button id="tabSettings" onclick="show('settings')">4. CONFIGURACOES</button>
 </div>
 <div class="stage" id="stage">
 
@@ -44,8 +46,7 @@
   <div class="panel" id="pList" style="width:1560px;height:900px;left:180px;top:70px;">
     <div class="title" style="left:0;top:42px;width:100%;height:60px;font-size:46px;">SIMPLE KITS</div>
     <div class="accent" style="top:108px;"></div>
-    <div class="btn gray" style="left:810px;top:44px;width:250px;height:60px;font-size:16px;">PEGAR SEM ESPACO: OFF</div>
-    <div class="btn gray" style="left:1085px;top:44px;width:230px;height:60px;font-size:18px;">AUTO-EQUIP: ON</div>
+    <div class="gear" style="left:1140px;top:44px;width:60px;height:60px;font-size:34px;">&#9881;</div>
     <div class="btn red" style="left:1362px;top:44px;width:150px;height:60px;font-size:22px;">CLOSE</div>
     <div class="lbl" style="left:710px;top:812px;width:140px;height:40px;font-size:24px;">01</div>
     <div class="btn gray" style="left:48px;top:810px;width:90px;height:62px;font-size:26px;">&lt;</div>
@@ -56,52 +57,60 @@
       <img class="ki" src="https://cdn.jsdelivr.net/gh/Akulation/vanilla-icons@main/icons/328.png" style="left:16px;top:58px;">
       <div class="kp" style="left:116px;top:58px;width:188px;height:100px;">Locker x1</div>
       <div class="kc" style="left:0;bottom:74px;height:24px;">READY</div>
-      <div class="btn green" style="left:50px;bottom:10px;width:220px;height:58px;font-size:21px;">CLAIM</div>
+      <div class="btn green" style="left:0px;bottom:10px;width:150px;height:58px;font-size:18px;">CLAIM</div>
+      <div class="btn gray" style="left:170px;bottom:10px;width:150px;height:58px;font-size:15px;">VISUALIZAR</div>
     </div>
     <div class="kit" style="left:453.3px;top:120px;width:320px;height:280px;">
       <div class="kt" style="top:10px;height:36px;">medic</div><div class="ka" style="top:50px;"></div>
       <img class="ki" src="https://cdn.jsdelivr.net/gh/Akulation/vanilla-icons@main/icons/95.png" style="left:16px;top:58px;">
       <div class="kp" style="left:116px;top:58px;width:188px;height:100px;">Bandage x2<br>Rope x3<br>Crossbow x1</div>
       <div class="kc" style="left:0;bottom:74px;height:24px;">READY</div>
-      <div class="btn green" style="left:50px;bottom:10px;width:220px;height:58px;font-size:21px;">CLAIM</div>
+      <div class="btn green" style="left:0px;bottom:10px;width:150px;height:58px;font-size:18px;">CLAIM</div>
+      <div class="btn gray" style="left:170px;bottom:10px;width:150px;height:58px;font-size:15px;">VISUALIZAR</div>
     </div>
     <div class="kit" style="left:786.7px;top:120px;width:320px;height:280px;">
       <div class="kt" style="top:10px;height:36px;">Kit 3</div><div class="ka" style="top:50px;"></div>
       <div class="kp" style="left:116px;top:58px;width:188px;height:100px;color:#475569;">Sem itens</div>
       <div class="kc" style="left:0;bottom:74px;height:24px;">READY</div>
-      <div class="btn disabled" style="left:50px;bottom:10px;width:220px;height:58px;font-size:21px;">SEM ITENS</div>
+      <div class="btn disabled" style="left:0px;bottom:10px;width:150px;height:58px;font-size:15px;">SEM ITENS</div>
+      <div class="btn gray" style="left:170px;bottom:10px;width:150px;height:58px;font-size:15px;">VISUALIZAR</div>
     </div>
     <div class="kit" style="left:1120px;top:120px;width:320px;height:280px;">
       <div class="kt" style="top:10px;height:36px;">Kit 4</div><div class="ka" style="top:50px;"></div>
       <img class="ki" src="https://cdn.jsdelivr.net/gh/Akulation/vanilla-icons@main/icons/393.png" style="left:16px;top:58px;">
       <div class="kp" style="left:116px;top:58px;width:188px;height:100px;">Rope x3</div>
       <div class="kc" style="left:0;bottom:74px;height:24px;">READY</div>
-      <div class="btn green" style="left:50px;bottom:10px;width:220px;height:58px;font-size:21px;">CLAIM</div>
+      <div class="btn green" style="left:0px;bottom:10px;width:150px;height:58px;font-size:18px;">CLAIM</div>
+      <div class="btn gray" style="left:170px;bottom:10px;width:150px;height:58px;font-size:15px;">VISUALIZAR</div>
     </div>
     <div class="kit" style="left:120px;top:500px;width:320px;height:280px;">
       <div class="kt" style="top:10px;height:36px;">Kit 5</div><div class="ka" style="top:50px;"></div>
       <img class="ki" src="https://cdn.jsdelivr.net/gh/Akulation/vanilla-icons@main/icons/394.png" style="left:16px;top:58px;">
       <div class="kp" style="left:116px;top:58px;width:188px;height:100px;">Crossbow x1</div>
       <div class="kc" style="left:0;bottom:74px;height:24px;">READY</div>
-      <div class="btn green" style="left:50px;bottom:10px;width:220px;height:58px;font-size:21px;">CLAIM</div>
+      <div class="btn green" style="left:0px;bottom:10px;width:150px;height:58px;font-size:18px;">CLAIM</div>
+      <div class="btn gray" style="left:170px;bottom:10px;width:150px;height:58px;font-size:15px;">VISUALIZAR</div>
     </div>
     <div class="kit" style="left:453.3px;top:500px;width:320px;height:280px;">
       <div class="kt" style="top:10px;height:36px;">Kit 6</div><div class="ka" style="top:50px;"></div>
       <div class="kp" style="left:116px;top:58px;width:188px;height:100px;color:#475569;">Sem itens</div>
       <div class="kc" style="left:0;bottom:74px;height:24px;">READY</div>
-      <div class="btn disabled" style="left:50px;bottom:10px;width:220px;height:58px;font-size:21px;">SEM ITENS</div>
+      <div class="btn disabled" style="left:0px;bottom:10px;width:150px;height:58px;font-size:15px;">SEM ITENS</div>
+      <div class="btn gray" style="left:170px;bottom:10px;width:150px;height:58px;font-size:15px;">VISUALIZAR</div>
     </div>
     <div class="kit" style="left:786.7px;top:500px;width:320px;height:280px;">
       <div class="kt" style="top:10px;height:36px;">Kit 7</div><div class="ka" style="top:50px;"></div>
       <div class="kp" style="left:116px;top:58px;width:188px;height:100px;color:#475569;">Sem itens</div>
       <div class="kc" style="left:0;bottom:74px;height:24px;">READY</div>
-      <div class="btn disabled" style="left:50px;bottom:10px;width:220px;height:58px;font-size:21px;">SEM ITENS</div>
+      <div class="btn disabled" style="left:0px;bottom:10px;width:150px;height:58px;font-size:15px;">SEM ITENS</div>
+      <div class="btn gray" style="left:170px;bottom:10px;width:150px;height:58px;font-size:15px;">VISUALIZAR</div>
     </div>
     <div class="kit" style="left:1120px;top:500px;width:320px;height:280px;">
       <div class="kt" style="top:10px;height:36px;">Kit 8</div><div class="ka" style="top:50px;"></div>
       <div class="kp" style="left:116px;top:58px;width:188px;height:100px;color:#475569;">Sem itens</div>
       <div class="kc" style="left:0;bottom:74px;height:24px;">READY</div>
-      <div class="btn disabled" style="left:50px;bottom:10px;width:220px;height:58px;font-size:21px;">SEM ITENS</div>
+      <div class="btn disabled" style="left:0px;bottom:10px;width:150px;height:58px;font-size:15px;">SEM ITENS</div>
+      <div class="btn gray" style="left:170px;bottom:10px;width:150px;height:58px;font-size:15px;">VISUALIZAR</div>
     </div>
   </div>
 
@@ -165,15 +174,34 @@
     <div class="btn green" style="left:270px;top:732px;width:820px;height:54px;font-size:18px;">FECHAR BAU E VOLTAR AO EDITOR</div>
   </div>
 
+  <!-- ============ PAINEL: CONFIGURACOES (1560x900 em left 180 top 70; centro local 780,450) ============ -->
+  <div class="panel" id="pSettings" style="display:none;width:1560px;height:900px;left:180px;top:70px;">
+    <div class="title" style="left:0;top:42px;width:100%;height:60px;font-size:46px;">CONFIGURAÇÕES</div>
+    <div class="accent" style="top:108px;"></div>
+    <div class="btn red" style="left:1362px;top:44px;width:150px;height:60px;font-size:22px;">FECHAR</div>
+    <div class="lbl" style="left:180px;top:240px;width:360px;height:64px;text-align:left;font-size:24px;color:#fff;">AUTO-EQUIP</div>
+    <div class="btn blue" style="left:480px;top:240px;width:200px;height:64px;font-size:24px;">ON</div>
+    <div class="btn gray" style="left:788px;top:240px;width:64px;height:64px;font-size:28px;">?</div>
+    <div class="lbl" style="left:180px;top:340px;width:360px;height:64px;text-align:left;font-size:24px;color:#fff;">PEGAR SEM ESPAÇO</div>
+    <div class="btn gray" style="left:480px;top:340px;width:200px;height:64px;font-size:24px;">OFF</div>
+    <div class="btn gray" style="left:788px;top:340px;width:64px;height:64px;font-size:28px;">?</div>
+    <div class="panel" style="left:420px;top:666px;width:720px;height:170px;background:#101A30;">
+      <div class="accent" style="top:0px;height:3px;"></div>
+      <div class="lbl" style="left:20px;top:16px;width:680px;height:140px;text-align:left;font-size:15px;color:#fff;line-height:1.6;">PEGAR SEM ESPAÇO<br>ON: se não couber no inventário, o que sobrar cai no chão e o cooldown é consumido.<br>OFF: se não houver espaço, o resgate é bloqueado e o cooldown NÃO é consumido.</div>
+    </div>
+  </div>
+
 </div>
 <script>
   function show(p){
     document.getElementById('pList').style.display = p==='list' ? 'block':'none';
     document.getElementById('pEdit').style.display = p==='edit' ? 'block':'none';
     document.getElementById('pVault').style.display = p==='vault' ? 'block':'none';
+    document.getElementById('pSettings').style.display = p==='settings' ? 'block':'none';
     document.getElementById('tabList').className = p==='list'?'active':'';
     document.getElementById('tabEdit').className = p==='edit'?'active':'';
     document.getElementById('tabVault').className = p==='vault'?'active':'';
+    document.getElementById('tabSettings').className = p==='settings'?'active':'';
   }
   function fit(){
     var s = Math.min(1, (window.innerWidth-16)/1920, (window.innerHeight-60)/1080);

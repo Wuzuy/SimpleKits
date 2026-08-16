@@ -43,6 +43,19 @@
   <Translation Id="ui_auto_off" Value="AUTO-EQUIP: OFF" />
   <Translation Id="ui_overflow_on" Value="PEGAR SEM ESPACO: ON" />
   <Translation Id="ui_overflow_off" Value="PEGAR SEM ESPACO: OFF" />
+  <Translation Id="ui_on" Value="ON" />
+  <Translation Id="ui_off" Value="OFF" />
+  <Translation Id="tip_auto_equip" Value="AUTO-EQUIP&#xA;ON: itens do kit são equipados automaticamente (arma na mão, roupas vestidas).&#xA;OFF: todos os itens vão direto para o inventário." />
+  <Translation Id="tip_overflow" Value="PEGAR SEM ESPAÇO&#xA;ON: se não couber no inventário, o que sobrar cai no chão e o cooldown é consumido.&#xA;OFF: se não houver espaço, o resgate é bloqueado e o cooldown NÃO é consumido." />
+  <Translation Id="detail_mira" Value="Mira" />
+  <Translation Id="detail_tatico" Value="Tático" />
+  <Translation Id="detail_grip" Value="Grip" />
+  <Translation Id="detail_cano" Value="Cano" />
+  <Translation Id="detail_pente" Value="Pente" />
+  <Translation Id="detail_municao" Value="Munição: {0}/{1}" />
+  <Translation Id="detail_sem_estado" Value="sem acessórios armazenados" />
+  <Translation Id="ui_overflow_on" Value="PEGAR SEM ESPACO: ON" />
+  <Translation Id="ui_overflow_off" Value="PEGAR SEM ESPACO: OFF" />
   <Translation Id="kit_ui_mao_vazia" Value="Voce nao esta segurando nenhum item." />
   <Translation Id="kit_ui_mao_ok" Value="Item {0} adicionado ao kit (1x)." />
   <Translation Id="kit_vault_aberto" Value="Baú aberto! Arraste itens do seu inventario para o bau e feche (F ou ESC) para gravar no kit. Os itens do bau SUBSTITUEM os itens atuais do kit." />
